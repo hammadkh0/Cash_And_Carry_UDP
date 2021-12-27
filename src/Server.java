@@ -156,8 +156,7 @@ public class Server implements Serializable{
 
                 ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("product.txt"));
                 output.writeObject(list1);
-                break;
-            }
+                break;            }
         }
         String str;
         if (i == list1.size()){

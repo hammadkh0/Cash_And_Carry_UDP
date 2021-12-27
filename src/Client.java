@@ -3,6 +3,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Client {
@@ -21,7 +22,13 @@ public class Client {
         System.out.print("Enter your name: ");
         buyer.setName(inFromUser.readLine());
         System.out.print("Enter your age: ");
-        buyer.setAge(scan.nextInt());
+        int age;
+        while(!scan.hasNextInt()){
+            System.out.print("Enter the correct age: ");
+            scan.next();
+        }
+        age=scan.nextInt();
+        buyer.setAge(age);
 
         //SEND A PACKET CONTAINING BUYER INFORMATION TO THE SERVER TO ADD THE BUYER TO A FILE
         byte[] data = PacketHandler.createPacket(buyer);
@@ -33,11 +40,22 @@ public class Client {
             Scanner input = new Scanner(System.in);
             System.out.print("1. Add Entity Data \n2. View Records \n3. Search Record \n4. Purchase an Item " +
                     "\n5. View Your Purchase History \n6. Exit\n");
-            System.out.print("Enter an Option: ");
-            int x = input.nextInt();
+            System.out.print(">>> Enter an Option: ");
+
+            int x;
+            while(!scan.hasNextInt()){
+                System.out.print("Not a number!!! Enter an integer value:");
+                scan.next();
+            }
+            x=scan.nextInt();
             while(x < 1 || x > 6){
-                System.out.println("\nInvalid Input! Enter a correct Option");
-                x = input.nextInt();
+                System.out.print("*** Value must be between 1 and 6 *** : ");
+
+                while(!scan.hasNextInt()){
+                    System.out.print("Not a number!!! Enter an integer value:");
+                    scan.next();
+                }
+                x=scan.nextInt();
             }
             if(x == 1){
                 AddItems(clientSocket,IPAddress);
@@ -66,12 +84,24 @@ public class Client {
         System.out.print("Enter Product Name: ");
         prd.setProductName(inFromUser.readLine());
         System.out.print("Enter a product ID: ");
+//        int id;
+        while(!scan.hasNextInt()){
+            System.out.print("Not a number!!! Enter an integer value: ");
+            scan.next();
+        }
+//        id=scan.nextInt();
         prd.setProductId(scan.nextInt());
         System.out.print("Enter a Product Brand: ");
         prd.setBrand(inFromUser.readLine());
         System.out.print("Enter a Product Category: ");
         prd.setCategory(inFromUser.readLine());
         System.out.print("Enter the number of Items: ");
+//        int items;
+        while(!scan.hasNextInt()){
+            System.out.print("Not a number!!! Enter an integer value:");
+            scan.next();
+        }
+//        items=scan.nextInt();
         prd.setQuantity(scan.nextInt());
 
         /* ADD THE PRODUCT OBJECT TO THE MESSAGE CLASS ALONG WITH "ADD" OPTION
@@ -168,11 +198,22 @@ public class Client {
         System.out.print("Enter the item name you want to purchase: ");
         String prodName = inFromUser.readLine();
         System.out.print("Enter the number of items to purchase: ");
-        int quantity = scan.nextInt();
+        int quantity;
+        while(!scan.hasNextInt()){
+            System.out.print("Not a number!!! Enter an integer value:");
+            scan.next();
+        }
+        quantity =scan.nextInt();
+
         // BUYER CANNOT ORDER A NEGATIVE OR A ZER0 AMOUNT OF PRODUCTS
         while(quantity <= 0){
-            System.out.println("Invalid Amount! Enter an appropriate amount");
-            quantity = scan.nextInt();
+            System.out.print("*** Quantity cannot be zero or less than zero *** : ");
+
+            while(!scan.hasNextInt()){
+                System.out.print("Not a number!!! Enter an integer value:");
+                scan.next();
+            }
+            quantity=scan.nextInt();
         }
 
         /* 3 THINGS WILL BE PASSED IN THE MESSAGE. THE PRODUCT NAME, THE QUANTITY AND THE NAME OF BUYER
